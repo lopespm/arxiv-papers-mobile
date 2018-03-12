@@ -1,0 +1,5 @@
+{
+  "rootDir": "../../",
+  "setupTestFrameworkScriptFile": "./config/tests/e2eDetoxInit.js",
+  "testMatch": ["**/__e2e__/**/*.js"]
+}

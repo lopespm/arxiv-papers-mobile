@@ -1,0 +1,129 @@
+apply plugin: "com.android.application"
+apply plugin: "io.fabric"
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
+import com.android.build.OutputFile
+
+project.ext.react = [
+    entryFile: "index.js",
+    bundleInDebug: false,
+]
+
+apply from: "../../node_modules/react-native/react.gradle"
+
+def enableSeparateBuildPerCPUArchitecture = false
+def enableProguardInReleaseBuilds = true
+
+// Keystore and IAB license key
+def secrets = new Properties()
+def secretsFile = rootProject.file("secrets.properties")
+if (!secretsFile.exists()) {
+    logger.warn("secrets.properties did not exist. Creating a placeholder at ${secretsFile.getPath()}")
+    secrets.setProperty("keystoreFile", "none")
+    secrets.setProperty("keystoreKeyAlias", "none")
+    secrets.setProperty("keystoreKeyPassword", "none")
+    secrets.setProperty("inAppBillingLicenseKey", "\"none\"")
+    secretsFile.createNewFile()
+    secrets.store(new FileOutputStream(secretsFile), "Place here the release signing key properties and the IAB license key")
+}
+secrets.load(new FileInputStream(secretsFile))
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion "26.0.2"
+
+    defaultConfig {
+        applicationId "com.rockbyte.arxiv"
+        minSdkVersion 18
+        targetSdkVersion 27
+        versionCode 9
+        versionName "1.0"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+
+        // Detox (Tests and Automation Library)
+        testBuildType System.getProperty('testBuildType', 'debug')
+        missingDimensionStrategy "minReactNative", "minReactNative46"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            storeFile file(secrets['keystoreFile'])
+            storePassword secrets['keystorePassword']
+            keyAlias secrets['keystoreKeyAlias']
+            keyPassword secrets['keystoreKeyPassword']
+            v2SigningEnabled false
+        }
+    }
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk false
+            include "armeabi-v7a", "x86"
+        }
+    }
+    buildTypes {
+        buildTypes.each {
+            it.buildConfigField "String", "IAB_LICENSE_KEY", secrets.getProperty('inAppBillingLicenseKey', 'null')
+        }
+        release {
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def versionCodes = ["armeabi-v7a":1, "x86":2]
+            def abi = output.getFilter(OutputFile.ABI)
+            if (abi != null) {  // null for the universal-debug, universal-release variants
+                output.versionCodeOverride =
+                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation project(':react-native-snackbar')
+    implementation project(':react-native-billing')
+    implementation project(':react-native-fetch-blob')
+    implementation(project(':react-native-firebase')) {
+        transitive = false
+    }
+    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true
+    }
+
+    ext {
+        appcompat_version = '27.0.2'
+        playServices_version = '11.8.0'
+        firebase_version = '11.8.0'
+    }
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "com.android.support:appcompat-v7:$appcompat_version"
+    implementation "com.android.support:support-media-compat:$appcompat_version"
+    implementation "com.android.support:support-v4:$appcompat_version"
+
+    // RNFirebase required dependencies
+    implementation "com.google.firebase:firebase-core:$firebase_version"
+    implementation "com.google.android.gms:play-services-base:$playServices_version"
+    implementation "com.google.firebase:firebase-crash:$firebase_version"
+
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation project(':react-native-vector-icons')
+
+    // Tests
+    androidTestImplementation(project(path: ":detox"))
+    androidTestImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+}
+
+apply plugin: 'com.google.gms.google-services'
