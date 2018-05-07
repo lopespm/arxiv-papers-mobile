@@ -1,5 +1,4 @@
 apply plugin: "com.android.application"
-apply plugin: "io.fabric"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 import com.android.build.OutputFile
@@ -22,7 +21,6 @@ if (!secretsFile.exists()) {
     secrets.setProperty("keystoreFile", "none")
     secrets.setProperty("keystoreKeyAlias", "none")
     secrets.setProperty("keystoreKeyPassword", "none")
-    secrets.setProperty("inAppBillingLicenseKey", "\"none\"")
     secretsFile.createNewFile()
     secrets.store(new FileOutputStream(secretsFile), "Place here the release signing key properties and the IAB license key")
 }
@@ -37,7 +35,7 @@ android {
         minSdkVersion 18
         targetSdkVersion 27
         versionCode 9
-        versionName "1.0"
+        versionName "1.0-no-google-play"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -65,9 +63,6 @@ android {
         }
     }
     buildTypes {
-        buildTypes.each {
-            it.buildConfigField "String", "IAB_LICENSE_KEY", secrets.getProperty('inAppBillingLicenseKey', 'null')
-        }
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
@@ -92,29 +87,15 @@ android {
 
 dependencies {
     implementation project(':react-native-snackbar')
-    implementation project(':react-native-billing')
     implementation project(':react-native-fetch-blob')
-    implementation(project(':react-native-firebase')) {
-        transitive = false
-    }
-    implementation('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
-        transitive = true
-    }
 
     ext {
         appcompat_version = '27.0.2'
-        playServices_version = '11.8.0'
-        firebase_version = '11.8.0'
     }
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:$appcompat_version"
     implementation "com.android.support:support-media-compat:$appcompat_version"
     implementation "com.android.support:support-v4:$appcompat_version"
-
-    // RNFirebase required dependencies
-    implementation "com.google.firebase:firebase-core:$firebase_version"
-    implementation "com.google.android.gms:play-services-base:$playServices_version"
-    implementation "com.google.firebase:firebase-crash:$firebase_version"
 
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(':react-native-vector-icons')
@@ -125,5 +106,3 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.1'
 }
-
-apply plugin: 'com.google.gms.google-services'
