@@ -14,7 +14,6 @@ import getTheme from './theme/components';
 import themeProperties from './theme/attributes';
 
 import { connectionOffline, connectionOnline } from './modules/connection/actions';
-import { fetchPurchasedDonations } from './modules/donations/actions';
 
 import type { Persistor } from 'redux-persist/lib/types';
 import type { Store } from 'redux';
@@ -40,7 +39,6 @@ export default class App<T> extends Component<T, State> {
         const isConnected = await NetInfo.isConnected.fetch();
         this.handleConnectivityChange(isConnected);
         NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectivityChange);
-        this.state.store.dispatch(fetchPurchasedDonations());
     }
 
     handleConnectivityChange = (isConnected: boolean) => {

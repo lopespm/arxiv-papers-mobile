@@ -6,7 +6,7 @@ export const NAVIGATE_SEARCH = 'NAVIGATE_SEARCH';
 export const NAVIGATE_DETAILS = 'NAVIGATE_DETAILS';
 
 export type Action = {|
-    +type: 'NAVIGATE_BACK' | 'PURCHASE_TEA_SUCCESS',
+    +type: 'NAVIGATE_BACK',
 |} | {|
     +type: 'NAVIGATE_SEARCH',
     +payload: {|

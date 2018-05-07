@@ -16,7 +16,7 @@ export default class SearchBar extends React.Component {
         onSubmitEditing: PropTypes.func,
         placeholder: PropTypes.string,
         padding: PropTypes.number,
-        inputStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.function]),
+        inputStyle: PropTypes.object,
         menuComponent: PropTypes.object,
         iconCloseComponent: PropTypes.object,
         iconSearchComponent: PropTypes.object,

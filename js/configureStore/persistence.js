@@ -13,7 +13,7 @@ const persistConfig = {
     storage,
     transforms: [whitelistDownloadedPapers],
     stateReconciler: hardSet,
-    whitelist: ['papers', 'donations'],
+    whitelist: ['papers'],
 };
 
 export const persistReducer = rootReducer => persistReducerRP(persistConfig, rootReducer);

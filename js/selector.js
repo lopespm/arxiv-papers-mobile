@@ -2,7 +2,6 @@
 import { createSelector } from 'reselect';
 import * as fromPapers from './modules/papers/selector';
 import * as fromArticles from './modules/articles/selector';
-import * as fromDonations from './modules/donations/selector';
 import * as fromNavigation from './modules/navigation/selector';
 import * as fromConnection from './modules/connection/selector';
 import type { State } from './reducer';
@@ -13,7 +12,6 @@ const provide = provider =>
             selector(provider(state), props);
 export const providePapersTo = provide(state => state.papers);
 export const provideArticlesTo = provide(state => state.articles);
-export const provideDonationsTo = provide(state => state.donations);
 export const provideSnackbarTo = provide(state => state.snackbar);
 export const provideNavigationTo = provide(state => state.navigation);
 export const provideConnectionTo = provide(state => state.connection);
@@ -58,7 +56,5 @@ export const getCurrentPageOfDownloadedPapersArticlesIds = (state: State) => {
         .slice(startIndex, startIndex + pageSize)
         .map(({ id }) => id);
 };
-
-export const getIsTeaPurchased = (state: State) => provideDonationsTo(fromDonations.getIsTeaPurchased)(state);
 
 export const getIsConnected = (state: State) => provideConnectionTo(fromConnection.getIsConnected)(state);
