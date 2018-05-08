@@ -1,0 +1,3 @@
+Quickly search through a wealth of scientific papers offered by arXiv. Those you choose to download are kept at easy reach to consult and see.
+
+App built using react native.
