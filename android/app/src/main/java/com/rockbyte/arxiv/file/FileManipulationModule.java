@@ -28,7 +28,7 @@ public class FileManipulationModule extends ReactContextBaseJavaModule {
             File file = new File(filepath);
             if (!file.exists()) {
                 promise.resolve(filepath);
-            } else if(file.delete()){
+            } else if (file.delete()) {
                 promise.resolve(filepath);
             } else {
                 promise.reject(null, "Could not delete file");

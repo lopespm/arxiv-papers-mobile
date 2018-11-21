@@ -2,25 +2,27 @@ buildscript {
     repositories {
         jcenter()
         google()
-        maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://maven.fabric.io/public" }
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
-        classpath 'com.google.gms:google-services:3.1.1'
-        classpath 'io.fabric.tools:gradle:1.25.1'
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.google.gms:google-services:3.3.1' //4.2.0
+        classpath 'io.fabric.tools:gradle:1.26.1'
     }
 }
 
 allprojects {
     repositories {
-        mavenLocal()
         jcenter()
-        maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url "$rootDir/../node_modules/react-native/android"
-        }
-        maven { url 'https://maven.google.com' }
-        maven { url 'https://maven.fabric.io/public' }
         google()
+        mavenLocal()
+        maven { url "https://maven.fabric.io/public" }
+        maven { url "$rootDir/../node_modules/react-native/android" }
+        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
     }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
