@@ -34,7 +34,7 @@ Launch the bundler server and run the debug version on an Android device:
 
 ### End to End
 
-The [Detox](https://github.com/wix/detox) automation library is used for for this purpose.
+The [Detox](https://github.com/wix/detox) automation library is used for this purpose.
 
 First build the app and test apks:
 
