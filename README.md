@@ -9,7 +9,7 @@ ArXiv Papers is a mobile application to search, download and save arXiv papers. 
       alt="Get it on Google Play"
       height="80">](https://play.google.com/store/apps/details?id=com.rockbyte.arxiv)
 
-## Screnshots
+## Screenshots
 
 ![arXiv Papers Android App](https://lopespm.github.io/files/arxiv-papers/arxiv_layout_implementation.png)
 
